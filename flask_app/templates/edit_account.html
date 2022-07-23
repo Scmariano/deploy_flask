@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Magazine</title>
+</head>
+<body>
+    <nav class="navbar bg-dark">
+        <div class="container-fluid d-flex justify-content-around">
+            <h3 class="navbar-nav mb-2 text-primary">Update User</h3>
+            <div class="d-flex justify-content-end">
+                <a href="/magazine/new">Add Magazine</a>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="/dashboard">Dashboard</a>
+            </div>
+            <div class="d-flex justify-content-e">
+                <a href="/logout"><button class="btn btn-primary">Logout</button></a>
+            </div>
+        </div>
+    </nav><br>
+    <div class="d-flex justify-content-around margin">
+        <form action="/user/edit/{{user.id}}" method="post" class="col-6 p-4 bg-dark text-light">
+            <input name='id' type="hidden" value="{{user.id}}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                            <p>{{message}}</p>
+                        {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" name="first_name" class="form-control" value="{{user.first_name}}">
+            </div><br>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" name="last_name" class="form-control" value="{{user.last_name}}">
+            </div><br>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" class="form-control" value="{{user.email}}">
+            </div><br>
+            <div class=" d-flex justify-content-end" >
+                <a href="/user/account"> <button class="btn btn-primary">Update</button></a>
+            </div>
+        </form>
+        <div class="table  p-5 bg-dark text-light">
+            <h4 class="text-center">User's Magazines:</h4><hr>
+            {% for magazine in magazines %}
+                {% if magazine.user_id == user.id %}
+                    <p>{{magazine.title}}
+                        <a href="/magazine/{{magazine.id}}/delete">Delete</a>
+                    </p>
+                    <p>{{magazine.user_id_who_subscribed | length}} subscribers</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
